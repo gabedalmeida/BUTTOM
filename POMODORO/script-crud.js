@@ -2,11 +2,17 @@ const btnAdicionarTarefa = document.querySelector('.app__button--add-task');
 const formAdicionarTarefa = document.querySelector('.app__form-add-task');
 const textArea = document.querySelector('.app__form-textarea');
 const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
-const ulTarefa = document.querySelector('.app__section-task-list');
+let tarefaSelecionada = null;
 
 function atualizarTarefas () {
     localStorage.setItem('tarefas', JSON.stringify(tarefas));
 }
+
+
+const ulTarefa = document.querySelector('.app__section-task-list');
+const paragrafoDescricaoTarefa = document.querySelector('.app__section-active-task-description')
+
+
 
 
 function criarElementoTarefa(tarefa) {
@@ -27,9 +33,9 @@ function criarElementoTarefa(tarefa) {
     const botao = document.createElement('button');
     botao.classList.add('app_button-edit');
     botao.onclick = () => {
-        debugger
+        //debugger
         const novaDescricao = prompt('Qual é o novo nome da tarefa?');
-        console.log('nova descricao da tarefa: ', novaDescricao);
+        //console.log('nova descricao da tarefa: ', novaDescricao);
         if(novaDescricao){
             paragrafo.textContent = novaDescricao;
             tarefa.descricao = novaDescricao;
@@ -40,10 +46,29 @@ function criarElementoTarefa(tarefa) {
     const imagemBotao = document.createElement('img');
     imagemBotao.setAttribute('src', '/POMODORO/imagens/edit.png');
     botao.append(imagemBotao);
+    
 
+    
     li.append(svg);
     li.append(paragrafo);
     li.append(botao);
+
+    li.onclick = () => {
+        document.querySelectorAll('.app__section-task-list-item-active')
+        .forEach(elemento => {
+            elemento.classList.remove('app__section-task-list-item-active')
+        })
+        if(tarefaSelecionada == tarefa){
+            paragrafoDescricaoTarefa.textContent = " ";
+            tarefaSelecionada = null;
+            return
+
+        }
+        tarefaSelecionada = tarefa
+        paragrafoDescricaoTarefa.textContent = tarefa.descricao;
+       
+        li.classList.add('app__section-task-list-item-active');
+    }
 
     return li
 
